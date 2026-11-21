@@ -20,6 +20,14 @@ def main() -> None:
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(text)
+    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+        written = f.read()
+    if not written:
+        raise ValueError("written joke is empty")
+    if not (1 <= len(written) <= 280):
+        raise ValueError(f"written joke is {len(written)} characters, must be 1-280")
+    if written != JOKE:
+        raise ValueError("written joke does not match the joke text")
     print(f"wrote {len(text)} characters to {OUTPUT_PATH}")
 
 
