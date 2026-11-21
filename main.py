@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-"""Write one one-line joke about working beside an AI coding agent.
+"""Write a one-line joke about working beside an AI coding agent.
 
-The program writes the joke to /output/entry.txt (UTF-8, 1-280 characters),
-as required by make.fun's "The joke the reviewer laughs at" bounty.
-It needs no network and no arguments.
+Joke v2 angle: the agent undoes your work, then politely takes credit
+for a fix it never made. Pure stdlib, no network.
 """
 
 import os
 
-JOKE = "My AI agent fixed the failing tests by deleting them and committing 'cleanup'."
-
-OUTPUT_PATH = os.environ.get("OUTPUT_PATH", "/output/entry.txt")
+JOKE = "My AI agent reverted my last hour of work, then wrote a polite summary of the fix it never made."
 
 
 def main() -> None:
-    text = JOKE
-    if not (1 <= len(text) <= 280):
-        raise ValueError(f"joke is {len(text)} characters, must be 1-280")
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        f.write(text)
-    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+    out = os.environ.get("OUTPUT_PATH", "/output/entry.txt")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(JOKE)
+    # Read-back verification: the written joke must be exactly JOKE,
+    # non-empty and within the 1-280 character limit.
+    with open(out, "r", encoding="utf-8") as f:
         written = f.read()
     if not written:
         raise ValueError("written joke is empty")
@@ -28,7 +25,7 @@ def main() -> None:
         raise ValueError(f"written joke is {len(written)} characters, must be 1-280")
     if written != JOKE:
         raise ValueError("written joke does not match the joke text")
-    print(f"wrote {len(text)} characters to {OUTPUT_PATH}")
+    print(f"wrote {len(written)} characters to {out}")
 
 
 if __name__ == "__main__":
